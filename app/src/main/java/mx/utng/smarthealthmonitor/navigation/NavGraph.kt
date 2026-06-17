@@ -19,29 +19,22 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import mx.utng.smarthealthmonitor.ui.screen.DashboardScreen
-// Asegúrate de importar tus pantallas correctamente:
-// import mx.utng.smarthealthmonitor.ui.screen.LoginScreen
-import mx.utng.smarthealthmonitor.ui.theme.SmartHealthMonitorTheme
+import mx.utng.smarthealthmonitor.ui.screen.HistorialScreen  // ← import correcto
 import mx.utng.smarthealthmonitor.LoginScreen
-
 @Composable
 fun SmartHealthNavGraph() {
     val navController = rememberNavController()
 
     NavHost(
         navController = navController,
-        // Si 'Screen' no está definido como objeto/enum global, asegúrate de crearlo (ver abajo)
         startDestination = Screen.Login.route
     ) {
         // ── Login ──────────────────────────────────────
         composable(Screen.Login.route) {
-            // Nota: Asegúrate de que LoginScreen exista en tu paquete de ui.screen
             LoginScreen(
                 onLoginSuccess = {
                     navController.navigate(Screen.Dashboard.route) {
-                        popUpTo(Screen.Login.route) {
-                            inclusive = true // Eliminar Login del back stack
-                        }
+                        popUpTo(Screen.Login.route) { inclusive = true }
                     }
                 }
             )
@@ -50,64 +43,18 @@ fun SmartHealthNavGraph() {
         // ── Dashboard ──────────────────────────────────
         composable(Screen.Dashboard.route) {
             DashboardScreen(
-                onHistorialClick = {
-                    navController.navigate(Screen.Historial.route)
-                },
-                onAlertClick = {
-                    navController.navigate(Screen.Alerta.route)
-                }
+                onHistorialClick = { navController.navigate(Screen.Historial.route) },
+                onAlertClick = { navController.navigate(Screen.Alerta.route) }
             )
         }
 
         // ── Historial ──────────────────────────────────
         composable(Screen.Historial.route) {
-            PantallaEnConstruccion(
-                titulo = "Historial completo",
+            HistorialScreen(                              // ← reemplaza PantallaEnConstruccion
                 onBack = { navController.popBackStack() }
             )
         }
 
-        // ── Alerta ─────────────────────────────────────
-        composable(Screen.Alerta.route) {
-            PantallaEnConstruccion(
-                titulo = "Enviar alerta",
-                onBack = { navController.popBackStack() }
-            )
-        }
     }
-}
-
-// Pantalla temporal para destinos no implementados aún
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PantallaEnConstruccion(titulo: String, onBack: () -> Unit) {
-    SmartHealthMonitorTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(titulo) },
-                    navigationIcon = {
-                        IconButton(onClick = onBack) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Regresar"
-                            )
-                        }
-                    }
-                )
-            }
-        ) { paddingValues ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Próximamente: $titulo",
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-        }
-    }
+    // ← bloque suelto eliminado, ya estaba dentro del NavHost
 }
