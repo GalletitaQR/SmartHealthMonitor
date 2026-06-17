@@ -34,30 +34,48 @@ import mx.utng.smarthealthmonitor.ui.components.FilaHistorial
 import mx.utng.smarthealthmonitor.ui.components.TarjetaDato
 import mx.utng.smarthealthmonitor.ui.theme.SmartHealthMonitorTheme
 import mx.utng.smarthealthmonitor.ui.viewmodel.DashboardViewModel
-
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
     onHistorialClick: () -> Unit = {},
-    onAlertClick: () -> Unit = {},
-    viewModel: DashboardViewModel = viewModel() // Inyección automática del ViewModel
+    viewModel: DashboardViewModel = viewModel()
 ) {
-    // collectAsState() convierte StateFlow en State de Compose
     val fc by viewModel.fc.collectAsState()
+    val historial by viewModel.historial.collectAsState()
+    var mostrarAlerta by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
-    val historial by viewModel.historial.collectAsState()  // ← collectAsState()
+    // Diálogo de alerta
+    if (mostrarAlerta) {
+        AlertaScreen(
+            fc = fc,
+            onDismiss = { mostrarAlerta = false },
+            onConfirmar = {
+                mostrarAlerta = false
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = "✓ Alerta enviada a tus contactos",
+                        duration = SnackbarDuration.Long
+                    )
+                }
+            }
+        )
+    }
 
     SmartHealthMonitorTheme {
         Scaffold(
+            snackbarHost = { SnackbarHost(snackbarHostState) },  // ← necesario
             topBar = {
                 TopAppBar(
-                    title = {
-                        Text(
-                            text = "SmartHealth",
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    },
+                    title = { Text("SmartHealth", style = MaterialTheme.typography.titleLarge) },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         titleContentColor = MaterialTheme.colorScheme.onPrimary
@@ -66,26 +84,18 @@ fun DashboardScreen(
             },
             floatingActionButton = {
                 FloatingActionButton(
-                    onClick = onAlertClick,
+                    onClick = { mostrarAlerta = true },   // ← abre el diálogo
                     containerColor = MaterialTheme.colorScheme.error
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Warning,
-                        contentDescription = "Enviar alerta de emergencia",
-                        tint = MaterialTheme.colorScheme.onError
-                    )
+                    Icon(Icons.Default.Warning, contentDescription = "Alerta")
                 }
             }
         ) { paddingValues ->
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
+                modifier = Modifier.fillMaxSize().padding(paddingValues),
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-
-                // ── Tarjeta FC ────────────────────────────
                 item {
                     TarjetaDato(
                         valor = "$fc",
@@ -94,39 +104,23 @@ fun DashboardScreen(
                         colorValor = MaterialTheme.colorScheme.error
                     )
                 }
-
-                // ── Encabezado historial ──────────────────
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "Historial reciente",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        TextButton(onClick = onHistorialClick) {
-                            Text("Ver todo")
-                        }
+                        Text("Historial reciente", style = MaterialTheme.typography.titleMedium)
+                        TextButton(onClick = onHistorialClick) { Text("Ver todo") }
                     }
                 }
-
-                // ── Lista del historial ───────────────────
                 items(historial, key = { it.id }) { lectura ->
                     FilaHistorial(lectura = lectura)
                 }
-
-                // ── Botón de simulación (SOLO PARA DEBUG) ──
-                // ── Botón de simulación (SOLO PARA DEBUG) ──
                 item {
-                    val scope = rememberCoroutineScope()   // ← agregar esto
                     OutlinedButton(
                         onClick = {
-                            val fcSimulado = (60..110).random()
-                            scope.launch {                  // ← envolver en launch
-                                SmartHealthRepository.actualizarFC(fcSimulado)
-                            }
+                            scope.launch { SmartHealthRepository.actualizarFC((60..110).random()) }
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
