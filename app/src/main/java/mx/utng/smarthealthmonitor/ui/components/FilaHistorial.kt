@@ -2,7 +2,6 @@ package mx.utng.smarthealthmonitor.ui.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontWeight
-import mx.utng.smarthealthmonitor.data.models.LecturaFC
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +12,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.HorizontalDivider
-
+import mx.utng.smarthealthmonitor.data.db.LecturaFC
 // ui/components/FilaHistorial.kt
 @Composable
 fun FilaHistorial(
