@@ -5,18 +5,16 @@ plugins {
 }
 
 android {
-    namespace = "mx.utng.wear"
-    compileSdk {
-        version = release(36)
-    }
+    namespace = "mx.utng.smarthealthmonitor.wear"
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "mx.utng.smarthealthmonitor.wear"
         minSdk = 30
-        targetSdk = 36
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
-
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -26,6 +24,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            isTestCoverageEnabled = false
         }
     }
     compileOptions {
@@ -75,4 +76,11 @@ dependencies {
     implementation(project(":shared"))
 
     implementation("androidx.compose.material:material-icons-core:1.6.7")
+
+    // WatchFace API
+    implementation("androidx.wear.watchface:watchface:1.2.1")
+    implementation("androidx.wear.watchface:watchface-complications-rendering:1.2.1")
+    implementation("androidx.wear.watchface:watchface-style:1.2.1")
+    // WatchFace API — falta esta:
+    implementation("androidx.wear.watchface:watchface-guava:1.2.1")
 }
