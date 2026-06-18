@@ -17,6 +17,7 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var wearDataSender: WearDataSender
 
+//Comentario para hacer pull request
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         wearDataSender = WearDataSender(this)
