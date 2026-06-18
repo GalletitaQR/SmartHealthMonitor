@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.emptyFlow
  *	El ViewModel lee de aquí.
  */
 object SmartHealthRepository {
+    private val _pasosFlow = MutableStateFlow(0)  // ← NUEVO
+    val pasosFlow: StateFlow<Int> = _pasosFlow.asStateFlow()  // ← NUEVO
     private val _fcFlow = MutableStateFlow(0)
     val fcFlow: StateFlow<Int> = _fcFlow.asStateFlow()
     private var dao: LecturaFCDao? = null
@@ -26,6 +28,12 @@ object SmartHealthRepository {
 // Persistir en Room automáticamente
         dao?.insertar(LecturaFC(valorBpm = bpm))
     }
+
+    suspend fun actualizarPasos(pasos: Int) {  // ← NUEVO
+        _pasosFlow.value = pasos
+    }
+
+
     // Flow del historial desde Room
     fun obtenerHistorial(): Flow<List<LecturaFC>> =
     dao?.obtenerUltimas() ?: emptyFlow()
