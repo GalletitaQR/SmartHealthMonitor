@@ -11,7 +11,7 @@ import mx.utng.wear.presentation.theme.SmartHealthMonitorTheme
 class WearMainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState)
         setContent {
-                WearDashboardScreen()
+            SmartHealthWearNavGraph()
         }
     }
 }

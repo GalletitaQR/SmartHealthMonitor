@@ -73,4 +73,6 @@ dependencies {
     implementation("com.google.android.horologist:horologist-compose-material:0.6.17")
     // Compartir Repository con el módulo app
     implementation(project(":shared"))
+
+    implementation("androidx.compose.material:material-icons-core:1.6.7")
 }
