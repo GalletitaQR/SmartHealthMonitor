@@ -49,6 +49,7 @@ fun DashboardScreen(
 ) {
     val fc by viewModel.fc.collectAsState()
     val historial by viewModel.historial.collectAsState()
+    val pasos by viewModel.pasos.collectAsState()
     var mostrarAlerta by remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -102,6 +103,14 @@ fun DashboardScreen(
                         unidad = "bpm",
                         label = "Frecuencia cardíaca",
                         colorValor = MaterialTheme.colorScheme.error
+                    )
+                }
+                item {
+                    TarjetaDato(
+                        valor = "$pasos",
+                        unidad = "pasos",
+                        label = "Pasos hoy",
+                        colorValor = MaterialTheme.colorScheme.primary
                     )
                 }
                 item {

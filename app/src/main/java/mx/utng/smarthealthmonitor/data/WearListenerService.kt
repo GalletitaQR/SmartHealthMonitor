@@ -30,6 +30,10 @@ class WearListenerService : WearableListenerService() {
                     val bpm = data.toIntOrNull() ?: return@launch
                     SmartHealthRepository.actualizarFC(bpm)
                 }
+                PATH_PASOS -> {
+                    val pasos = data.toIntOrNull() ?: return@launch
+                    SmartHealthRepository.actualizarPasos(pasos)
+                }
                 else -> Log.w(TAG, "Path desconocido: $path")
             }
         }

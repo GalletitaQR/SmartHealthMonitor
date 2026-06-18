@@ -9,6 +9,8 @@ import mx.utng.smarthealthmonitor.data.db.LecturaFC
 class DashboardViewModel : ViewModel() {
     val fc: StateFlow<Int> = SmartHealthRepository.fcFlow
 
+    val pasos: StateFlow<Int> = SmartHealthRepository.pasosFlow
+
     val historial: StateFlow<List<LecturaFC>> = SmartHealthRepository
         .obtenerHistorial()
         .stateIn(

@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
     <uses-permission android:name="android.permission.health.READ_HEART_RATE" />
     <uses-permission android:name="android.permission.health.READ_STEPS" />
+    <!-- Permiso requerido para Watch Faces en Wear OS -->
+    <uses-permission android:name="android.permission.HIDE_OVERLAY_WINDOWS" />
     <queries>
         <package android:name="com.google.android.apps.healthdata" />
     </queries>
@@ -34,7 +36,7 @@
             android:value="true" />
 
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".presentation.WearMainActivity"
             android:exported="true"
             android:taskAffinity=""
             android:theme="@style/MainActivityTheme.Starting">
@@ -54,6 +56,23 @@
                     "androidx.health.services.client.PassiveListenerService" />
             </intent-filter>
         </service>
+        <service
+            android:name=".presentation.watchface.SmartHealthWatchFaceService" android:exported="true"
+            android:label="SmartHealth Watch Face"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <meta-data
+                android:name="android.service.wallpaper" android:resource="@xml/watch_face" />
+            <meta-data
+                android:name=
+                    "com.google.android.wearable.watchface.preview" android:resource="@drawable/preview_digital" />
+            <intent-filter>
+                <action android:name=
+                    "android.service.wallpaper.WallpaperService" />
+                <category android:name=
+                    "com.google.android.wearable.watchface.category.WATCH_FACE" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>
