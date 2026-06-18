@@ -10,11 +10,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material.*
+import com.google.android.horologist.compose.layout.scrollAway
 import mx.utng.wear.presentation.components.WearFCCard
 
 @Composable
 fun WearDashboardScreen(
     onAlertClick: () -> Unit = {},
+    onHistorialClick: () -> Unit = {},
     viewModel: WearDashboardViewModel = viewModel()
 ) {
     val fc by viewModel.fc.collectAsState()
@@ -32,15 +34,12 @@ fun WearDashboardScreen(
             state = listState,
             modifier = Modifier.fillMaxSize()
         ) {
-            // Item 1: Card de frecuencia cardíaca
             item {
                 WearFCCard(
                     fc = fc,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-
-            // Item 2: Chip de Alerta
             item {
                 Chip(
                     label = { Text("🔔 Alerta") },
@@ -48,6 +47,13 @@ fun WearDashboardScreen(
                     colors = ChipDefaults.primaryChipColors(
                         backgroundColor = MaterialTheme.colors.error
                     ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            item {
+                Chip(
+                    label = { Text("📋 Historial") },
+                    onClick = onHistorialClick,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
