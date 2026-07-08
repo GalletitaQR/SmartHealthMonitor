@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import androidx.health.services.client.clearPassiveListenerCallback
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import mx.utng.smarthealthmonitor.data.SmartHealthRepository
-import mx.utng.smarthealthmonitor.data.db.LecturaFC
+import mx.utng.shared.data.SmartHealthRepository
+import mx.utng.shared.data.db.LecturaFC
 
 class WearDashboardViewModel(app: Application) : AndroidViewModel(app) {
 

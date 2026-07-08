@@ -7,7 +7,7 @@ import androidx.activity.compose.setContent
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
-import mx.utng.smarthealthmonitor.data.SmartHealthRepository
+import mx.utng.shared.data.SmartHealthRepository
 import mx.utng.smarthealthmonitor.navigation.SmartHealthNavGraph
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch

@@ -12,7 +12,7 @@ import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.Renderer
 import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.style.CurrentUserStyleRepository
-import mx.utng.smarthealthmonitor.data.SmartHealthRepository
+import mx.utng.shared.data.SmartHealthRepository
 import java.time.ZonedDateTime
 
 class SmartHealthRenderer(

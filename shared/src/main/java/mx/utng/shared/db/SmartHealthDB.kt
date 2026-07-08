@@ -1,4 +1,4 @@
-package mx.utng.smarthealthmonitor.data.db
+package mx.utng.shared.data.db
 
 import android.content.Context
 import androidx.room.*
