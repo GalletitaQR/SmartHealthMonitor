@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.wear.compose.material.*
-import mx.utng.smarthealthmonitor.data.db.LecturaFC
+import mx.utng.shared.data.db.LecturaFC
 
 @Composable
 fun WearFilaHistorial(lectura: LecturaFC) {

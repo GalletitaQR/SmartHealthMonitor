@@ -4,10 +4,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.Flow
-import mx.utng.smarthealthmonitor.data.db.LecturaFCDao
+import mx.utng.shared.data.db.LecturaFCDao
 import android.content.Context
-import mx.utng.smarthealthmonitor.data.db.LecturaFC
-import mx.utng.smarthealthmonitor.data.db.SmartHealthDB
+import mx.utng.shared.data.db.LecturaFC
+import mx.utng.shared.data.db.SmartHealthDB
 import kotlinx.coroutines.flow.emptyFlow
 /**
  *	Repositorio singleton que centraliza los datos de salud.

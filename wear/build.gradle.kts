@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "mx.utng.smarthealthmonitor.wear"
+    namespace = "mx.utng.wear"
     compileSdk = 36
 
     defaultConfig {

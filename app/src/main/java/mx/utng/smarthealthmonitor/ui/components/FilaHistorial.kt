@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.HorizontalDivider
-import mx.utng.smarthealthmonitor.data.db.LecturaFC
+import mx.utng.shared.data.db.LecturaFC
 // ui/components/FilaHistorial.kt
 @Composable
 fun FilaHistorial(
