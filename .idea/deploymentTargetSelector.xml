@@ -4,7 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-07-08T01:14:46.256449300Z">
+        <DropdownSelection timestamp="2026-07-08T22:44:36.871627400Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\zackg\.android\avd\Medium_Phone.avd" />
@@ -15,7 +15,7 @@
       </SelectionState>
       <SelectionState runConfigName="tvandroid">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-07-07T22:21:49.891500900Z">
+        <DropdownSelection timestamp="2026-07-08T23:02:44.467531300Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\zackg\.android\avd\Television_1080p.avd" />
