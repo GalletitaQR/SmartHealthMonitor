@@ -2,8 +2,15 @@ package mx.utng.shared.data.db
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+
+
+
 @Dao
 interface LecturaFCDao {
+
+    @Query("SELECT * FROM lecturas_fc WHERE id = :id LIMIT 1")
+    suspend fun obtenerPorId(id: Int): LecturaFC?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertar(lectura: LecturaFC)
 // Flow: actualización reactiva cuando hay nuevos datos
@@ -21,3 +28,4 @@ fun obtenerUltimas(): Flow<List<LecturaFC>>
     WHERE timestamp < :limite""")
     suspend fun limpiarViejos(limite: Long)
 }
+

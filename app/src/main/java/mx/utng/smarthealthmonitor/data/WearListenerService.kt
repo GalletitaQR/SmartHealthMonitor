@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import mx.utng.shared.data.SmartHealthRepository   // ← AGREGAR ESTA LÍNEA
 
 class WearListenerService : WearableListenerService() {
 
@@ -41,6 +42,6 @@ class WearListenerService : WearableListenerService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        scope.cancel()  // evitar memory leaks
+        scope.cancel()
     }
 }

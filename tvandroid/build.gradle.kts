@@ -65,4 +65,12 @@ dependencies {
 
     // Fragment KTX — necesario para el delegado "by viewModels()"
     implementation("androidx.fragment:fragment-ktx:1.8.5")
+
+    implementation("androidx.room:room-runtime:2.6.1")
+
+    // Media3 + ExoPlayer
+    val media3Version = "1.4.1"
+    implementation("androidx.media3:media3-exoplayer:$media3Version")
+    implementation("androidx.media3:media3-ui:$media3Version")
+    implementation("androidx.media3:media3-session:$media3Version")
 }
