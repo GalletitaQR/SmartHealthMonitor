@@ -1,6 +1,6 @@
 ## Unidad III
 
-Arquitectura
+Sección Arquitectura
 
 Sensor PPG (Wear OS)
 │ Health Services API
