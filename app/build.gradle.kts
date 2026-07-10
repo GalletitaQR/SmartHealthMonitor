@@ -70,4 +70,8 @@ dependencies {
     ksp("androidx.room:room-compiler:$roomVersion")
     implementation("org.nanohttpd:nanohttpd:2.3.1")
     implementation(project(":shared"))
+
+    //Cast SSDK
+    implementation("androidx.mediarouter:mediarouter:1.7.0")
+    implementation("com.google.android.gms:play-services-cast-framework:21.5.0")
 }
