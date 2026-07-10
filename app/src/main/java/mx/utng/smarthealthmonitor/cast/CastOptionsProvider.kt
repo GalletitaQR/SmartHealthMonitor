@@ -19,7 +19,3 @@ class CastOptionsProvider : OptionsProvider {
     override fun getAdditionalSessionProviders(context: Context): List<SessionProvider> =
         emptyList()
 }
-
-// Commit sugerido:
-// git add app/src/main/java/mx/utng/smarthealthmonitor/cast/CastOptionsProvider.kt
-// git commit -m "feat(cast): add CastOptionsProvider and AndroidManifest meta-data"
