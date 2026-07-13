@@ -33,7 +33,9 @@ fun SmartHealthWearNavGraph() {
             val fc by vm.fc.collectAsState()
             WearAlertaScreen(
                 fc          = fc,
-                onConfirmar = { navController.popBackStack() },
+                onConfirmar = {
+                    vm.enviarAlerta(fc)
+                    navController.popBackStack() },
                 onCancelar  = { navController.popBackStack() }
             )
         }
