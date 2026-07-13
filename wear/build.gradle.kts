@@ -83,4 +83,9 @@ dependencies {
     implementation("androidx.wear.watchface:watchface-style:1.2.1")
     // WatchFace API — falta esta:
     implementation("androidx.wear.watchface:watchface-guava:1.2.1")
+
+    //brpker
+    implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
+    implementation("org.eclipse.paho:org.eclipse.paho.android.service:1.1.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 }
