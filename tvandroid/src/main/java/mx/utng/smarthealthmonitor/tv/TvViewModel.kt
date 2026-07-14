@@ -11,6 +11,8 @@ import kotlinx.coroutines.launch
 import mx.utng.shared.data.SmartHealthRepository
 import mx.utng.shared.mqtt.*
 import mx.utng.smarthealthmonitor.tv.mqtt.*
+import androidx.lifecycle.ViewModelProvider
+
 
 class TvViewModel(
     private val repository: SmartHealthRepository,
@@ -44,5 +46,18 @@ class TvViewModel(
     override fun onCleared() {
         super.onCleared()
         mqttSubscriber.disconnect()
+    }
+}
+
+class TvViewModelFactory(
+    private val repository: SmartHealthRepository,
+    private val context: Context
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(TvViewModel::class.java)) {
+            return TvViewModel(repository, context) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }
 }

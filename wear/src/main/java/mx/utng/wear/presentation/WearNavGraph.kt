@@ -18,30 +18,35 @@ object WearScreens {
 fun SmartHealthWearNavGraph() {
     val navController = rememberSwipeDismissableNavController()
 
+    // 👇 Una sola instancia, scopeada a la Activity (vive mientras dure la sesión)
+    val sharedViewModel: WearDashboardViewModel = viewModel()
+
     SwipeDismissableNavHost(
         navController    = navController,
         startDestination = WearScreens.DASHBOARD
     ) {
         composable(WearScreens.DASHBOARD) {
             WearDashboardScreen(
-                onAlertClick     = { navController.navigate(WearScreens.ALERTA) },
-                onHistorialClick = { navController.navigate(WearScreens.HISTORIAL) }
+                viewModel         = sharedViewModel,
+                onAlertClick      = { navController.navigate(WearScreens.ALERTA) },
+                onHistorialClick  = { navController.navigate(WearScreens.HISTORIAL) }
             )
         }
         composable(WearScreens.ALERTA) {
-            val vm: WearDashboardViewModel = viewModel()
-            val fc by vm.fc.collectAsState()
+            val fc by sharedViewModel.fc.collectAsState()
             WearAlertaScreen(
                 fc          = fc,
                 onConfirmar = {
-                    vm.enviarAlerta(fc)
-                    navController.popBackStack() },
+                    sharedViewModel.enviarAlerta(fc)
+                    navController.popBackStack()
+                },
                 onCancelar  = { navController.popBackStack() }
             )
         }
         composable(WearScreens.HISTORIAL) {
             WearHistorialScreen(
-                onBack = { navController.popBackStack() }
+                viewModel = sharedViewModel,
+                onBack    = { navController.popBackStack() }
             )
         }
     }

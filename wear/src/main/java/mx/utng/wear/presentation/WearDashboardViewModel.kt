@@ -80,6 +80,7 @@ class WearDashboardViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    // 👇 corregido: publica en el topic/modelo de ALERTA, no en el de FC
     fun enviarAlerta(bpmActual: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             mqttPublisher.publishFC(

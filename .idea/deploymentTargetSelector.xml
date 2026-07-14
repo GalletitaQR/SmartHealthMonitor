@@ -15,7 +15,7 @@
       </SelectionState>
       <SelectionState runConfigName="tvandroid">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-07-08T23:02:44.467531300Z">
+        <DropdownSelection timestamp="2026-07-14T00:11:37.037253800Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\zackg\.android\avd\Television_1080p.avd" />
@@ -26,6 +26,17 @@
       </SelectionState>
       <SelectionState runConfigName="WearMainActivity">
         <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="MainActivity">
+        <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2026-07-13T23:53:03.720027500Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\zackg\.android\avd\Medium_Phone.avd" />
+            </handle>
+          </Target>
+        </DropdownSelection>
+        <DialogSelection />
       </SelectionState>
     </selectionStates>
   </component>

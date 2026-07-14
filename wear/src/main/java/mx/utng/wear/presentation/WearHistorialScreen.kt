@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
@@ -19,7 +18,7 @@ import mx.utng.wear.presentation.components.WearFilaHistorial
 @Composable
 fun WearHistorialScreen(
     onBack: () -> Unit,
-    viewModel: WearDashboardViewModel = viewModel()
+    viewModel: WearDashboardViewModel = viewModel()   // fallback por si se usa standalone
 ) {
     val historial by viewModel.historial.collectAsState()
     val listState = rememberScalingLazyListState()
@@ -42,9 +41,7 @@ fun WearHistorialScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .rotaryScrollable(
-                    behavior = RotaryScrollableDefaults.behavior(
-                        scrollableState = listState
-                    ),
+                    behavior = RotaryScrollableDefaults.behavior(scrollableState = listState),
                     focusRequester = focusRequester
                 )
         ) {

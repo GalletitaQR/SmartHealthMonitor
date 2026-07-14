@@ -14,11 +14,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
 import mx.utng.shared.data.db.LecturaFC
-
+import mx.utng.shared.data.SmartHealthRepository
 
 class MainFragment : BrowseSupportFragment() {
 
-    private val viewModel: TvViewModel by viewModels()
+    private val viewModel: TvViewModel by viewModels {
+        TvViewModelFactory(
+            repository = SmartHealthRepository,
+            context = requireContext().applicationContext
+        )
+    }
     private lateinit var estadoAdapter: ArrayObjectAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,20 +42,24 @@ class MainFragment : BrowseSupportFragment() {
                 val detail = DetailFragment.newInstance(item.id)
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.main_browse_fragment, detail)
-                    .addToBackStack(null) // Back regresa al BrowseFragment
+                    .addToBackStack(null)
                     .commit()
             }
         }
     }
 
-
-
     private fun observarDatos() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.fc.collect { valorFc ->
+                viewModel.state.collect { uiState ->
                     estadoAdapter.clear()
-                    estadoAdapter.add(LecturaFC(id = 0, valorBpm = valorFc, hora = "Ahora"))
+                    estadoAdapter.add(
+                        LecturaFC(
+                            id = 0,
+                            valorBpm = uiState.fcActual,
+                            hora = if (uiState.isLoading) "Esperando..." else uiState.ultimaHora
+                        )
+                    )
                 }
             }
         }

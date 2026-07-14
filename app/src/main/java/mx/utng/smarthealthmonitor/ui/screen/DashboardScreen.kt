@@ -1,4 +1,6 @@
 package mx.utng.smarthealthmonitor.ui.screen
+
+import android.view.ContextThemeWrapper
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -77,7 +79,7 @@ fun DashboardScreen(
 
     SmartHealthMonitorTheme {
         Scaffold(
-            snackbarHost = { SnackbarHost(snackbarHostState) },  // ← necesario
+            snackbarHost = { SnackbarHost(snackbarHostState) },
             topBar = {
                 TopAppBar(
                     title = { Text("SmartHealth", style = MaterialTheme.typography.titleLarge) },
@@ -87,10 +89,17 @@ fun DashboardScreen(
                     ),
                     actions = {
                         // CastButton: AndroidView que envuelve MediaRouteButton
+                        // Se usa ContextThemeWrapper porque MediaRouteButton es una View
+                        // clásica que necesita un tema Material con colores resueltos;
+                        // sin esto, recibe background transparente (#0) y crashea.
                         AndroidView(
                             factory = { context ->
-                                MediaRouteButton(context).apply {
-                                    CastButtonFactory.setUpMediaRouteButton(context, this)
+                                val themedContext = ContextThemeWrapper(
+                                    context,
+                                    com.google.android.material.R.style.Theme_MaterialComponents_DayNight
+                                )
+                                MediaRouteButton(themedContext).apply {
+                                    CastButtonFactory.setUpMediaRouteButton(themedContext, this)
                                 }
                             },
                             modifier = Modifier.size(48.dp)
@@ -100,7 +109,7 @@ fun DashboardScreen(
             },
             floatingActionButton = {
                 FloatingActionButton(
-                    onClick = { mostrarAlerta = true },   // ← abre el diálogo
+                    onClick = { mostrarAlerta = true },
                     containerColor = MaterialTheme.colorScheme.error
                 ) {
                     Icon(Icons.Default.Warning, contentDescription = "Alerta")
