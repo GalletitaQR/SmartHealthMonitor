@@ -27,6 +27,7 @@ class WearDashboardViewModel(app: Application) : AndroidViewModel(app) {
     val fc: StateFlow<Int> = _fc.asStateFlow()
 
     private val mqttPublisher = MqttWearPublisher(app)
+    private val neonRepo = WearNeonRepository()
 
     private val passiveClient =
         HealthServices.getClient(app).passiveMonitoringClient
@@ -38,7 +39,21 @@ class WearDashboardViewModel(app: Application) : AndroidViewModel(app) {
                 .lastOrNull()
                 ?.value
                 ?.toInt()
-            if (bpm != null) _fc.value = bpm
+            if (bpm != null) {
+                _fc.value = bpm
+                val estado = when {
+                    bpm < 60 -> "FC Baja"
+                    bpm > 100 -> "FC Alta"
+                    else -> "Normal"
+                }
+                viewModelScope.launch(Dispatchers.IO) {
+                    runCatching {
+                        neonRepo.publicarLectura(bpm, estado)
+                    }.onFailure {
+                        android.util.Log.w("WEAR", "Sin red: ${it.message}")
+                    }
+                }
+            }
         }
     }
 
@@ -77,6 +92,11 @@ class WearDashboardViewModel(app: Application) : AndroidViewModel(app) {
 
         viewModelScope.launch(Dispatchers.IO) {
             mqttPublisher.publishFC(bpm, estado)
+            runCatching {
+                neonRepo.publicarLectura(bpm, estado)
+            }.onFailure {
+                android.util.Log.w("WEAR", "Sin red: ${it.message}")
+            }
         }
     }
 
@@ -87,6 +107,11 @@ class WearDashboardViewModel(app: Application) : AndroidViewModel(app) {
                 bpm = bpmActual,
                 estado = "FC fuera de rango"
             )
+            runCatching {
+                neonRepo.publicarLectura(bpmActual, "FC fuera de rango")
+            }.onFailure {
+                android.util.Log.w("WEAR", "Sin red: ${it.message}")
+            }
         }
     }
 
