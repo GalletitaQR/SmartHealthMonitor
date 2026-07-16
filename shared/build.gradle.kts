@@ -33,6 +33,21 @@ android {
         buildConfigField("String", "MQTT_USERNAME", "\"${localProperties.getProperty("MQTT_USERNAME", "")}\"")
         buildConfigField("String", "MQTT_PASSWORD", "\"${localProperties.getProperty("MQTT_PASSWORD", "")}\"")
 
+        val neonApiKey = localProperties.getProperty("NEON_API_KEY", "")
+        val neonProjectUrl = localProperties.getProperty("NEON_PROJECT_URL", "")
+        val neonConnString = localProperties.getProperty("NEON_CONN_STRING", "")
+
+        val neonHost = if (neonProjectUrl.isNotEmpty()) {
+            neonProjectUrl.substringAfter("https://").substringBefore("/")
+        } else if (neonConnString.isNotEmpty()) {
+            neonConnString.substringAfter("@").substringBefore("/")
+        } else {
+            localProperties.getProperty("NEON_HOST", "")
+        }
+
+        buildConfigField("String", "NEON_API_KEY", "\"$neonApiKey\"")
+        buildConfigField("String", "NEON_HOST", "\"$neonHost\"")
+        buildConfigField("String", "NEON_CONN_STRING", "\"$neonConnString\"")
     }
 
     buildTypes {
@@ -68,6 +83,12 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
+
+    // Retrofit + OkHttp para Neon HTTP API
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     //Broker
     implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")

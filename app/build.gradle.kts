@@ -1,3 +1,13 @@
+import java.util.Properties
+import java.io.FileInputStream
+
+val localProperties = Properties().apply {
+    val localFile = rootProject.file("local.properties")
+    if (localFile.exists()) {
+        load(FileInputStream(localFile))
+    }
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -20,6 +30,22 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val neonApiKey = localProperties.getProperty("NEON_API_KEY", "")
+        val neonProjectUrl = localProperties.getProperty("NEON_PROJECT_URL", "")
+        val neonConnString = localProperties.getProperty("NEON_CONN_STRING", "")
+
+        val neonHost = if (neonProjectUrl.isNotEmpty()) {
+            neonProjectUrl.substringAfter("https://").substringBefore("/")
+        } else if (neonConnString.isNotEmpty()) {
+            neonConnString.substringAfter("@").substringBefore("/")
+        } else {
+            localProperties.getProperty("NEON_HOST", "")
+        }
+
+        buildConfigField("String", "NEON_API_KEY", "\"$neonApiKey\"")
+        buildConfigField("String", "NEON_HOST", "\"$neonHost\"")
+        buildConfigField("String", "NEON_CONN_STRING", "\"$neonConnString\"")
     }
 
     buildTypes {
@@ -71,6 +97,15 @@ dependencies {
     ksp("androidx.room:room-compiler:$roomVersion")
     implementation("org.nanohttpd:nanohttpd:2.3.1")
     implementation(project(":shared"))
+
+    // Retrofit + OkHttp para llamadas a Neon HTTP API
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    // WorkManager para sync periódico en background
+    implementation("androidx.work:work-runtime-ktx:2.9.1")
 
     //Cast SSDK
     implementation("androidx.mediarouter:mediarouter:1.7.0")
