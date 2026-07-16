@@ -25,8 +25,12 @@ object SmartHealthRepository {
     }
     suspend fun actualizarFC(bpm: Int) {
         _fcFlow.value = bpm
-// Persistir en Room automáticamente
-        dao?.insertar(LecturaFC(valorBpm = bpm))
+        val estado = when {
+            bpm < 60 -> "FC Baja"
+            bpm > 100 -> "FC Alta"
+            else -> "Normal"
+        }
+        dao?.insertar(LecturaFC(bpm = bpm, estado = estado, dispositivo = "app"))
     }
 
     suspend fun actualizarPasos(pasos: Int) {  // ← NUEVO
