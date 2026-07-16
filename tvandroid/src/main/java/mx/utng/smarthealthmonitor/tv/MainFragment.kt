@@ -14,17 +14,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
 import mx.utng.shared.data.db.LecturaFC
-import mx.utng.shared.data.SmartHealthRepository
 
 class MainFragment : BrowseSupportFragment() {
 
     private val viewModel: TvViewModel by viewModels {
         TvViewModelFactory(
-            repository = SmartHealthRepository,
             context = requireContext().applicationContext
         )
     }
-    private lateinit var estadoAdapter: ArrayObjectAdapter
+    private lateinit var estadisticasAdapter: ArrayObjectAdapter
+    private lateinit var historialAdapter: ArrayObjectAdapter
+    private lateinit var rowsAdapter: ArrayObjectAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,29 +48,33 @@ class MainFragment : BrowseSupportFragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.refresh()
+    }
+
     private fun observarDatos() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { uiState ->
-                    estadoAdapter.clear()
-                    estadoAdapter.add(
-                        LecturaFC(
-                            id = 0,
-                            valorBpm = uiState.fcActual,
-                            hora = if (uiState.isLoading) "Esperando..." else uiState.ultimaHora
-                        )
-                    )
+                    estadisticasAdapter.clear()
+                    estadisticasAdapter.addAll(0, uiState.estadisticas)
+
+                    historialAdapter.clear()
+                    historialAdapter.addAll(0, uiState.lecturas)
                 }
             }
         }
     }
 
     private fun cargarFilas() {
-        val rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
+        rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
 
-        estadoAdapter = ArrayObjectAdapter(FCCardPresenter())
-        estadoAdapter.add(LecturaFC(id = 0, valorBpm = 0, hora = "Esperando..."))
-        rowsAdapter.add(ListRow(HeaderItem("Estado actual"), estadoAdapter))
+        estadisticasAdapter = ArrayObjectAdapter(FCCardPresenter())
+        historialAdapter = ArrayObjectAdapter(FCCardPresenter())
+
+        rowsAdapter.add(ListRow(HeaderItem(0, "Estado Actual (3 dispositivos)"), estadisticasAdapter))
+        rowsAdapter.add(ListRow(HeaderItem(1, "Historial Completo"), historialAdapter))
 
         this.adapter = rowsAdapter
     }

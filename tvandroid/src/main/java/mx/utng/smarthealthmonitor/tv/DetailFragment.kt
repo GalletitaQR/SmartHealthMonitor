@@ -51,7 +51,7 @@ class DetailFragment : DetailsSupportFragment(), OnActionClickedListener {
                 // Ajusta los parámetros según las propiedades exactas de tu modelo 'LecturaFC'
                 val lecturaTemporal = LecturaFC(
                     id = 0,
-                    valorBpm = 80, // Puedes pasar un valor por defecto o serializar el objeto completo en los argumentos
+                    bpm = 80, // Puedes pasar un valor por defecto o serializar el objeto completo en los argumentos
                     hora = "En tiempo real"
                 )
                 lecturaActual = lecturaTemporal

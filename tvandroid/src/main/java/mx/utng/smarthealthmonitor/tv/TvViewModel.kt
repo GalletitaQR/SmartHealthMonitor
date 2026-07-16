@@ -8,55 +8,48 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import mx.utng.shared.data.SmartHealthRepository
-import mx.utng.shared.mqtt.*
-import mx.utng.smarthealthmonitor.tv.mqtt.*
+import mx.utng.shared.data.remote.toLecturaFC
 import androidx.lifecycle.ViewModelProvider
 
-
-class TvViewModel(
-    private val repository: SmartHealthRepository,
-    private val context: Context
-) : ViewModel() {
-
+class TvViewModel(private val context: Context) : ViewModel() {
+    private val neonRepo = TvNeonRepository()
     private val _state = MutableStateFlow(TvUiState())
     val state: StateFlow<TvUiState> = _state.asStateFlow()
 
-    // Flow de mensajes MQTT entrantes
-    private val mqttFlow = MutableStateFlow<TvMessage?>(null)
-    private val mqttSubscriber = MqttTvSubscriber(context, mqttFlow)
-
     init {
-        mqttSubscriber.connect()
+        cargarDatos()
+    }
+
+    fun cargarDatos() {
         viewModelScope.launch {
-            mqttFlow.collect { tvMsg ->
-                tvMsg ?: return@collect
+            _state.update { it.copy(isLoading = true) }
+            try {
+                val lecturas = neonRepo.obtenerHistorialCompleto(50)
+                val stats = neonRepo.obtenerEstadisticas()
                 _state.update {
                     it.copy(
-                        fcActual = tvMsg.bpm,
-                        fcEstado = tvMsg.estado,
-                        ultimaHora = tvMsg.hora,
-                        isLoading = false
+                        lecturas = lecturas.map { dto -> dto.toLecturaFC() },
+                        estadisticas = stats.map { dto -> dto.toLecturaFC() },
+                        isLoading = false,
+                        error = null
                     )
                 }
+            } catch (e: Exception) {
+                _state.update { it.copy(error = e.message, isLoading = false) }
             }
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        mqttSubscriber.disconnect()
-    }
+    fun refresh() = cargarDatos()
 }
 
 class TvViewModelFactory(
-    private val repository: SmartHealthRepository,
     private val context: Context
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TvViewModel::class.java)) {
-            return TvViewModel(repository, context) as T
+            return TvViewModel(context) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }
