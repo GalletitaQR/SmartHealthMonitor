@@ -26,10 +26,12 @@ class TvViewModel(private val context: Context) : ViewModel() {
             try {
                 val lecturas = neonRepo.obtenerHistorialCompleto(50)
                 val stats = neonRepo.obtenerEstadisticas()
+                val alertas = neonRepo.obtenerAlertas24Horas()
                 _state.update {
                     it.copy(
                         lecturas = lecturas.map { dto -> dto.toLecturaFC() },
                         estadisticas = stats.map { dto -> dto.toLecturaFC() },
+                        alertas = alertas.map { dto -> dto.toLecturaFC() },
                         isLoading = false,
                         error = null
                     )

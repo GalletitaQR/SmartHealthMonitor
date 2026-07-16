@@ -9,5 +9,6 @@ data class TvUiState(
     val isLoading: Boolean = true,
     val lecturas: List<LecturaFC> = emptyList(),
     val estadisticas: List<LecturaFC> = emptyList(),
+    val alertas: List<LecturaFC> = emptyList(),
     val error: String? = null
 )

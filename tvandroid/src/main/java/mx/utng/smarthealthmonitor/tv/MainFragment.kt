@@ -24,6 +24,7 @@ class MainFragment : BrowseSupportFragment() {
     }
     private lateinit var estadisticasAdapter: ArrayObjectAdapter
     private lateinit var historialAdapter: ArrayObjectAdapter
+    private lateinit var alertasAdapter: ArrayObjectAdapter
     private lateinit var rowsAdapter: ArrayObjectAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,6 +63,9 @@ class MainFragment : BrowseSupportFragment() {
 
                     historialAdapter.clear()
                     historialAdapter.addAll(0, uiState.lecturas)
+
+                    alertasAdapter.clear()
+                    alertasAdapter.addAll(0, uiState.alertas)
                 }
             }
         }
@@ -72,9 +76,11 @@ class MainFragment : BrowseSupportFragment() {
 
         estadisticasAdapter = ArrayObjectAdapter(FCCardPresenter())
         historialAdapter = ArrayObjectAdapter(FCCardPresenter())
+        alertasAdapter = ArrayObjectAdapter(FCCardPresenter())
 
         rowsAdapter.add(ListRow(HeaderItem(0, "Estado Actual (3 dispositivos)"), estadisticasAdapter))
         rowsAdapter.add(ListRow(HeaderItem(1, "Historial Completo"), historialAdapter))
+        rowsAdapter.add(ListRow(HeaderItem(2, "Alertas Recientes (Últimas 24h)"), alertasAdapter))
 
         this.adapter = rowsAdapter
     }
